@@ -23,6 +23,7 @@ var search_flight = function() {
             if (ar_response.length!=0){
               arrival_array = ar_response;
               result_page(departure_array, arrival_array, departure, destination);  //call result page with each corresponding variables
+
             } else {
               $(".errormsg").html("No such Arrival...");
             }
@@ -43,18 +44,27 @@ var search_flight = function() {
 
 //build result_page interface
 var result_page = function(departure_array, arrival_array, departure, destination){
+  if (oneWay){
+    $(".result-container").append("<div class = 'results'></div>");
+    $(".results").prepend("<h1 class = 'title'> Select Flight</h1>");
+    $(".result-container").append("<button class = 'submit' id = 'one'>Buy Now</button>");
+  } else {
+    $(".result-container").append("<div class = 'results_go'></div>");
+    $(".result-container").append("<div class='results_back'></div>");
+    $(".results_back").prepend("<h1 class='title'>Select Return Flight</h1>");
+    $(".results_go").prepend("<h1 class = 'title'> Select Departure Flight</h1>");
+    $(".result-container").append("<button class = 'submit' id = 'round'>Buy Now</button>");
+  }
   for (var i = 0; i < departure_array.length; i++){
     for (var j = 0; j< arrival_array.length; j++){
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
-        async: false, 
         success: (response) => {
           //for each response, build its own div with specific information
           //consider if the trip is oneway or roundtrip, building different interfaces for each
           if (oneWay){
             if (response.length!=0){
-              $(".result-container").append("<div class = 'results'></div>");
               for (var count = 0; count < response.length; count++){
                 $(".results").append("<div class = 'result' id = 'result_" + count + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
@@ -66,7 +76,6 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
             }
           } else {
             if (response.length!=0){
-              $(".result-container").append("<div class = 'results_go'></div>");
               for (var count = 0; count < response.length; count++){
                 $(".results_go").append("<div class = 'result_go' id = 'result_go_" + count + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
@@ -87,16 +96,8 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
       });
     }
   }
-  if ($(".result-container").is(":empty")){
-    $(".errormsg").html("No such Flights...");
-  } else {
-    if (oneWay){
-      $(".results").prepend("<h1 class = 'title'> Select Flight");
-      $(".result-container").append("<button class = 'submit' id = 'one'>Buy Now</button>");
-    } else {
-      $(".results_go").prepend("<h1 class = 'title'> Select Departure Flight");
-      $(".result-container").append("<button class = 'submit' id = 'round'>Buy Now</button>");
-    }
+  if(!oneWay){
+    returnFlight(arrival_array,departure_array);
   }
 
 }
@@ -151,4 +152,40 @@ function submit(){
        $('.errormsg').html("");
        search_flight();
   }
+}
+
+function returnFlight(departure_array, arrival_array){
+
+  for (var i = 0; i < departure_array.length; i++){
+    for (var j = 0; j< arrival_array.length; j++){
+      $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
+        type: "GET",
+        xhrFields: {withCredentials: true},
+        success: (response) => {
+          //for each response, build its own div with specific information
+          //consider if the trip is oneway or roundtrip, building different interfaces for each
+
+            if (response.length!=0){
+              for (var count = 0; count < response.length; count++){
+
+                $(".results_back").append("<div class = 'result_back' id = 'result_back_" + count + "' ></div>");
+                let time = response[count].departs_at.substring(11, 16);
+                time += " - ";
+                time += response[count].arrives_at.substring(11, 16);
+                find_airline(response[count].airline_id, count, time, "#result_back_");
+              }
+              $(".errormsg").html("");
+            }
+
+            $(".errormsg").html("");
+
+
+        },
+        error: () =>{
+          alert("Please check your internet connection!");
+        }
+      });
+    }
+  }
+
 }
