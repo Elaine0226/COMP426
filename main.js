@@ -69,6 +69,16 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
               for (var count = 0; count < response.length; count++){
                 $(".results").append("<div class = 'result' id = 'result_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
+
+                // add select buttons
+                id = '#result_'+k;
+                if(k==1){
+                  $(id).append("<input type='radio' id='oneWay_go_"+k+"' class='oneWay_go_' name='oneWay_go_button' checked>")
+                }else{
+                  $(id).append("<input type='radio' id='oneWay_go_"+k+"' class='oneWay_go_' name='oneWay_go_button'>")
+                }
+
+
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
                 find_airline(response[count].airline_id, k, time, "#result_", departure, destination);
@@ -81,6 +91,14 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
               for (var count = 0; count < response.length; count++){
                 $(".results_go").append("<div class = 'result_go' id = 'result_go_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
+
+                // add buttons for roundButtons for 'go'
+                id = '#result_go_'+k;
+                if(k==1){
+                    $(id).append("<input type='radio' id='roundTrip_go_" + k + "' class='roundTrip_go' name='roundTrip_go_button' checked>")
+                }
+                else {$(id).append("<input type='radio' id='roundTrip_go_" + k + "' class='roundTrip_go' name='roundTrip_go_button'>")}
+                 //
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
                 find_airline(response[count].airline_id, k, time, "#result_go_", departure, destination);
@@ -171,6 +189,21 @@ function returnFlight(departure_array, arrival_array){
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
                 $(".results_back").append("<div class = 'result_back' id = 'result_back_" + k + "' ></div>");
+
+                // Add buttons for selecting returning flights.
+                id = '#result_back_'+k;
+                if (k==1){
+                  $(id).append("<input type='radio' id='roundTrip_back_"+ k + "' class='roundTrip_back' name='roundTrip_back_button' checked>")
+                }
+                //id = '#result_back_'+k;
+                else {$(id).append("<input type='radio' id='roundTrip_back_" + k + "' class='roundTrip_back' name='roundTrip_back_button'>")}
+
+
+
+                // Select, details button
+                // roundtrip 两个 保证有两个都选上
+                // detail button
+
                 let time = response[count].departs_at.substring(11, 16);
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
