@@ -48,6 +48,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
+        async: false, 
         success: (response) => {
           //for each response, build its own div with specific information
           //consider if the trip is oneway or roundtrip, building different interfaces for each
@@ -62,8 +63,6 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 find_airline(response[count].airline_id, count, time, "#result_");
               }
               $(".errormsg").html("");
-              $(".results").prepend("<h1 class = 'title'> Select Flight");
-              $(".result-container").append("<button class = 'submit' id = 'one'>Buy Now</button>");
             }
           } else {
             if (response.length!=0){
@@ -76,8 +75,6 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 find_airline(response[count].airline_id, count, time, "#result_go_");
               }
               $(".errormsg").html("");
-              $(".results_go").prepend("<h1 class = 'title'> Select Departure Flight");
-              $(".result-container").append("<button class = 'submit' id = 'round'>Buy Now</button>");
             }
 
             $(".errormsg").html("");
@@ -92,6 +89,14 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
   }
   if ($(".result-container").is(":empty")){
     $(".errormsg").html("No such Flights...");
+  } else {
+    if (oneWay){
+      $(".results").prepend("<h1 class = 'title'> Select Flight");
+      $(".result-container").append("<button class = 'submit' id = 'one'>Buy Now</button>");
+    } else {
+      $(".results_go").prepend("<h1 class = 'title'> Select Departure Flight");
+      $(".result-container").append("<button class = 'submit' id = 'round'>Buy Now</button>");
+    }
   }
 
 }
