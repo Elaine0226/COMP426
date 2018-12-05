@@ -55,6 +55,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
     $(".results_go").prepend("<h1 class = 'title'> Select Departure Flight</h1>");
     $(".result-container").append("<button class = 'submit' id = 'round'>Buy Now</button>");
   }
+  var k = 0;
   for (var i = 0; i < departure_array.length; i++){
     for (var j = 0; j< arrival_array.length; j++){
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
@@ -66,22 +67,24 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
           if (oneWay){
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
-                $(".results").append("<div class = 'result' id = 'result_" + count + "' ></div>");
+                $(".results").append("<div class = 'result' id = 'result_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
-                find_airline(response[count].airline_id, count, time, "#result_");
+                find_airline(response[count].airline_id, k, time, "#result_");
+                k++;
               }
               $(".errormsg").html("");
             }
           } else {
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
-                $(".results_go").append("<div class = 'result_go' id = 'result_go_" + count + "' ></div>");
+                $(".results_go").append("<div class = 'result_go' id = 'result_go_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
-                find_airline(response[count].airline_id, count, time, "#result_go_");
+                find_airline(response[count].airline_id, k, time, "#result_go_");
+                k++;
               }
               $(".errormsg").html("");
             }
@@ -116,7 +119,7 @@ var find_airline = function(id, count, time, cname){
       $(cname + count).append("<div class = 'flight_places id = 'flight_places_" + count + "' >" + departure + " -> " + destination + "</div>");
     },
     error: ()=>{
-      alert("Please check your internet connection!");
+      $(cname+count).remove();
     }
   });
 }
@@ -155,7 +158,7 @@ function submit(){
 }
 
 function returnFlight(departure_array, arrival_array){
-
+  var k = 0;
   for (var i = 0; i < departure_array.length; i++){
     for (var j = 0; j< arrival_array.length; j++){
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
@@ -167,12 +170,12 @@ function returnFlight(departure_array, arrival_array){
 
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
-
-                $(".results_back").append("<div class = 'result_back' id = 'result_back_" + count + "' ></div>");
+                $(".results_back").append("<div class = 'result_back' id = 'result_back_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
-                find_airline(response[count].airline_id, count, time, "#result_back_");
+                find_airline(response[count].airline_id, k, time, "#result_back_");
+                k++;
               }
               $(".errormsg").html("");
             }
