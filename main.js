@@ -276,16 +276,19 @@ function returnFlight(departure_array, arrival_array){
    parent.find($(".details")).toggle();
  }
 
+ //recording flight_id of every change on input radio
  this.selectFlight_go = function(flight_id){
    selected_go = flight_id;
    console.log(flight_id);
  }
 
+  //recording flight_id of every change on input radio
  this.selectFlight = function(flight_id){
    selected = flight_id;
    console.log(flight_id);
  }
 
+  //recording flight_id of every change on input radio
  this.selectFlight_back = function(flight_id){
    selected_back = flight_id;
    console.log(flight_id);
