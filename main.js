@@ -2,7 +2,7 @@ var oneWay = false; // boolean value
 var root = "http://comp426.cs.unc.edu:3001/";
 var root_url = "http://comp426.cs.unc.edu:3001/";
 var departure, destination, date_go, date_back;
-var selected, selected_go, selected_back;
+var selected, selected_go, selected_back; //variables for recording selected flights_id onchange of input radio
 
 //use input text to search corresponding departure and arrival airport
 var search_flight = function() {
@@ -67,6 +67,8 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
             if (response.length!=0){ //flight info
               for (var count = 0; count < response.length; count++){
                 $(".results").append("<div class = 'result' id = 'result_" + k + "' ></div>");
+                //add a div called "general" which will include general information of a flight(not detail information)
+                //so that button of "detail" and input radio can be placed at where you want by using before() and after()
                 $("#result_"+k).append("<div class = 'general' id = 'general_" + k + "' ></div>");
                 id = '#general_'+k;
                 //add buttons for oneway
