@@ -396,6 +396,7 @@ function returnFlight(departure_array, arrival_array){
        alert("Please check your internet connection.");
      }
    });
+   console.log(instanceId_array);
    build_purchase_interface(instanceId_array);
  }
 
@@ -436,5 +437,10 @@ function returnFlight(departure_array, arrival_array){
        alert("Please check your internet connection.");
      }
    });
+   console.log(instanceId_array);
    build_purchase_interface(instanceId_array);
+ }
+
+ var home = function(){
+   location.reload();
  }
