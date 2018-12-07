@@ -11,13 +11,14 @@ $(document).ready(function () {
 
 // go to my trip page
 $(document).ready(function () {
-    $(".mytrips").click(function () {
+    $(".myTrips").click(function () {
         build_mytrip_interface();
     });
 });
 
 
 
+//after click "Book"
 
 var build_purchase_interface = function () {
     let nav = $('<div class="nav_div"> </div>');
@@ -28,6 +29,8 @@ var build_purchase_interface = function () {
 
     let body = $('body');
     body.empty();
+
+
 
     let firstName = $('<div class="firstName">First Name: </div>');
     firstName.append('<input type="text" name="firstName" id="firstName" placeholder="Put your first name" required></br>');
@@ -52,36 +55,34 @@ var build_purchase_interface = function () {
     let seatID = $('<div class="seatID">Seat ID: </div>');
     seatID.append('<input type="text" name="seatID" id="seatID" class = "numberonly" placeholder="Put your seat ID"></br>')
 
+    let email = $('<div class="email">Email: </div>');
+    email.append('<input type="text" name="email" id="email" class = "email" placeholder="Email address"></br>')
+
+
     let purchaseBtn = $('<input type="button" name="purchase" class = "unpurchased" value="Purchase"></input>');
 
 
 
-    // let dataticket = {};
-    // let ticketData = {};
-    // ticketData["first_name"] = $("#firstName").val();
-    // dataticket["ticket"] = ticketData;
 
     $(purchaseBtn).click(function () {
 
         $(this).removeClass('unpurchased').addClass('purchased');
 
-        console.log({
-            "ticket": {
-                "first_name": $("#firstName").val(),
-                "middle_name": $("#middleName").val(),
-                "last_name": $("#lastName").val(),
-                "age": parseInt($("#age").val(), 10),
-                "gender": $("input[name='gender']:checked").val(),
-                "is_purchased": true,
-                //"price_paid": "290.11",
-                "instance_id": parseInt($("#instanceID").val(), 10),
-                "seat_id": parseInt($("#seatID").val(), 10),
 
+        $.ajax(root_url + 'itineraries', {
+            type: 'POST',
+            xhrFields: { withCredentials: true },
+            data: {
+                "itinerary": {
+                    "email": $("#email").val(),
+                }
+            },
+            success: {
             }
-        }
+
+        });
 
 
-        );
         $.ajax(root_url + 'tickets', {
             type: 'POST',
             xhrFields: { withCredentials: true },
@@ -107,7 +108,6 @@ var build_purchase_interface = function () {
     });
 
 
-
     //numberonly not working
     $(".numberonly").on("keypress keyup blur", function (event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
@@ -117,13 +117,73 @@ var build_purchase_interface = function () {
     });
 
 
+    //print search result instance
+    let searchResults = $('<div class="searchResults">Search Results: </div>');
 
+    $.ajax(root_url + 'instances', {
+        type: 'GET',
+        xhrFields: { withCredentials: true },
+        dataType: 'json',
+        success: (response) => {
+            for (var i = 0; i < 1; i++) { //change to array.length
+                //var i = 0;
+                var instanceflightID = response[i].flight_id;
+
+
+
+                $.ajax(root_url + 'flights/' + instanceflightID, {
+                    type: 'GET',
+                    xhrFields: { withCredentials: true },
+                    dataType: 'json',
+                    success: (response) => {
+
+                        var flightinfo = $('<div class="flightinfo"></div>');
+                        //console.log(response.arrives_at.substring(0, 10));
+
+                        flightinfo.append("Departure: " + response.departs_at.substring(0, 10) + " " + response.departs_at.substring(12, 16)
+                            + "  | Arrival: " + response.arrives_at.substring(0, 10) + " " + response.arrives_at.substring(12, 16) + "</br>")
+
+                        var departureid = response.departure_id;
+
+                        $.ajax(root_url + 'airports/' + departureid, {
+                            type: 'GET',
+                            xhrFields: { withCredentials: true },
+                            dataType: 'json',
+                            success: (response) => {
+                                var departureairport = response.name;
+                                flightinfo.append("Depart at: " + departureairport + "  |  ")
+                            }
+                        })
+
+                        var arrivalid = response.arrival_id;
+
+                        $.ajax(root_url + 'airports/' + arrivalid, {
+                            type: 'GET',
+                            xhrFields: { withCredentials: true },
+                            dataType: 'json',
+                            success: (response) => {
+                                var arrivalairport = response.name;
+                                flightinfo.append("Arrive at: " + arrivalairport)
+                            }
+                        })
+
+
+                        searchResults.append(flightinfo);
+
+                    }
+                }
+                );
+
+
+            }
+        }
+    });
 
     $('body')
         .append(nav)
-        .append('<div>search result</div')//show search result
-
-        .append('<form id="myInfo"></form>');
+        .append(searchResults)//show search result
+        .append("</br>")
+        .append('<form id="myInfo"></form>') //show personal information
 
     $('#myInfo')
 
@@ -134,41 +194,142 @@ var build_purchase_interface = function () {
         .append(gender)
         .append(instanceID)
         .append(seatID)
+        .append(email)
         .append(purchaseBtn)
 
+
 }
+
+
+
+
 //my trip page
 var build_mytrip_interface = function () {
-    alert("buildmytrip");
-    let nav = $('<div class="nav_div"> </div>');
-    nav.append('<button class = "home"> Home </button>')
-    nav.append('<button class="myTrips">My Trips</button>')
-    nav.append('<button class="log">Log In</button>')
-
     let body = $('body');
     body.empty();
 
-    let mytickets = $('<div class="mytickets">My tickets: </div>');
+    let nav = $('<div class="nav_div"> </div>');
+    nav.append('<button class = "home"> Home </button>')
 
-    $.ajax(root_url + 'tickets',
-        {
+    let mytripbtn = $('<input type="button" class = "myTrips" value="My Trips"></input>');
+    nav.append(mytripbtn)
+
+    nav.append('<button class="log">Log In</button>')
+    $('body')
+        .append(nav)
+
+
+    let mytickets = $('<div class="mytickets">My tickets: </div>');
+    let searchResults = $('<div class="searchResults"> </div>');
+
+    let flightinfo = $('<div class="flightinfo"></div>');
+    let personalinfo = $('<div class="personalinfo"> </div>');
+
+
+
+
+    $(document).ready(function () {
+
+        $.ajax(root_url + 'instances', {
             type: 'GET',
             xhrFields: { withCredentials: true },
-            data: dataticket,
-            success: function (build_mytrip_interface) {
-                alert("Purchased!");
+            dataType: 'json',
+            success: (response) => {
+                for (var i = 0; i < 2; i++) { //change to response.length
+                    //var i = 0;
+                    var instanceflightID = response[i].flight_id;
+                    var instanceid = response[i].id;
+                    //console.log(instanceid);
+
+
+                    $.ajax(root_url + 'flights/' + instanceflightID, {
+                        type: 'GET',
+                        xhrFields: { withCredentials: true },
+                        dataType: 'json',
+                        success: (response) => {
+
+                            //console.log(response.arrives_at.substring(0, 10));
+
+                            flightinfo.append("Departure: " + response.departs_at.substring(0, 10) + " " + response.departs_at.substring(12, 16)
+                                + "  | Arrival: " + response.arrives_at.substring(0, 10) + " " + response.arrives_at.substring(12, 16) + "</br>")
+
+                            var departureid = response.departure_id;
+
+                            $.ajax(root_url + 'airports/' + departureid, {
+                                type: 'GET',
+                                xhrFields: { withCredentials: true },
+                                dataType: 'json',
+                                success: (response) => {
+                                    var departureairport = response.name;
+                                    flightinfo.append("Depart at: " + departureairport + "  |  ")
+                                }
+                            })
+
+                            var arrivalid = response.arrival_id;
+
+                            $.ajax(root_url + 'airports/' + arrivalid, {
+                                type: 'GET',
+                                xhrFields: { withCredentials: true },
+                                dataType: 'json',
+                                success: (response) => {
+                                    var arrivalairport = response.name;
+                                    flightinfo.append("Arrive at: " + arrivalairport)
+                                }
+                            })
+
+
+
+                        },
+                        async: false
+
+
+                    }
+                    );
+
+                    $.ajax(root_url + 'tickets?filter[instance_id]=' + instanceid,
+                        {
+                            type: 'GET',
+                            dataType: 'json',
+                            xhrFields: { withCredentials: true },
+                            success: (response) => {
+                                for (var k = 0; k < i; k++) {
+                                    //console.log(instanceid);
+                                    //console.log(response[k].first_name);
+
+                                    //for (var k = 0; k < response.length; k++) {
+                                    //var count = k + 1;
+                                    //personal information
+
+                                    $(personalinfo).append("<div>"
+                                        + "Name: " + response[k].first_name + " " + response[k].last_name
+                                        + "  Gender: " + response[k].gender
+                                        + "  Age: " + response[k].age + "</br>"
+                                        + "  Price: " + response[k].price_paid
+                                        + "  Itinery ID: " + response[k].itinerary_id + "</br></div>");
+
+
+
+                                }
+                            }
+
+
+                        });
+
+
+                    $('body')
+                        .append(flightinfo)
+                        .append(personalinfo);
+
+
+
+                }
             }
-
-
-        });
-
-
-
+        })
+    }
+    );
 
 
 
 
-    $('body')
-        .append(nav);
 
 }
