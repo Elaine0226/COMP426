@@ -390,15 +390,13 @@ function returnFlight(departure_array, arrival_array){
      data: instance,
      async: false,
      success: (response) => {
-       instanceId_array.push(response.id);
+       instanceId_array.push(response);
      },
      error: () => {
        alert("Please check your internet connection.");
      }
    });
-   console.log(selected);
-   console.log(instanceId_array);
-
+   build_purchase_interface(instanceId_array);
  }
 
  //post two instances (go and back) for round trip
@@ -415,7 +413,7 @@ function returnFlight(departure_array, arrival_array){
      data: instance_go,
      async: false,
      success: (response) => {
-       instanceId_array.push(response.id);
+       instanceId_array.push(response);
      },
      error: () => {
        alert("Please check your internet connection.");
@@ -432,12 +430,11 @@ function returnFlight(departure_array, arrival_array){
      data: instance_back,
      async: false,
      success: (re) => {
-       instanceId_array.push(re.id);
+       instanceId_array.push(re);
      },
      error: () => {
        alert("Please check your internet connection.");
      }
    });
-   console.log(selected_go, selected_back);
-   console.log(instanceId_array);
+   build_purchase_interface(instanceId_array);
  }
