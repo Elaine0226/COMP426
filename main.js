@@ -63,6 +63,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
+        async: false,
         success: (response) => {
           //for each response, build its own div with specific information
           //consider if the trip is oneway or roundtrip, building different interfaces for each
@@ -130,8 +131,14 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
   if(!oneWay){
     returnFlight(arrival_array,departure_array);
     $(".result-container").after("<button onclick = 'buyRoundtrip()' class = 'submit' id = 'round'>Buy Now</button>");
+    if (k==0){
+      $(".results_go").append("<div class = 'error_m'>Sorry, no such flights...</div>");
+    }
   } else {
     $(".result-container").after("<button onclick = 'buyOneway()' class = 'submit' id = 'one'>Buy Now</button>");
+    if (k==0){
+      $(".results").append("<div class = 'error_m'>Sorry, no such flights...</div>");
+    }
   }
 
 }
@@ -197,6 +204,7 @@ function returnFlight(departure_array, arrival_array){
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
+        async: false,
         success: (response) => {
           //for each response, build its own div with specific information
           //consider if the trip is oneway or roundtrip, building different interfaces for each
@@ -250,6 +258,9 @@ function returnFlight(departure_array, arrival_array){
         }
       });
     }
+  }
+  if (k==0){
+    $(".results_back").append("<div class = 'error_m'>Sorry, no such flights...</div>");
   }
 
 }
@@ -385,6 +396,7 @@ function returnFlight(departure_array, arrival_array){
        alert("Please check your internet connection.");
      }
    });
+   console.log(selected);
    console.log(instanceId_array);
 
  }
@@ -426,5 +438,6 @@ function returnFlight(departure_array, arrival_array){
        alert("Please check your internet connection.");
      }
    });
+   console.log(selected_go, selected_back);
    console.log(instanceId_array);
  }
