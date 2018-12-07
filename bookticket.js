@@ -222,8 +222,7 @@ var build_mytrip_interface = function () {
     let mytickets = $('<div class="mytickets">My tickets: </div>');
     let searchResults = $('<div class="searchResults"> </div>');
 
-    let flightinfo = $('<div class="flightinfo"></div>');
-    let personalinfo = $('<div class="personalinfo"> </div>');
+
 
 
 
@@ -241,7 +240,8 @@ var build_mytrip_interface = function () {
                     var instanceid = response[i].id;
                     //console.log(instanceid);
 
-
+                    let flightinfo = $('<div class="flightinfo"></div>');
+                    let personalinfo = $('<div class="personalinfo"> </div>');
                     $.ajax(root_url + 'flights/' + instanceflightID, {
                         type: 'GET',
                         xhrFields: { withCredentials: true },
@@ -262,7 +262,8 @@ var build_mytrip_interface = function () {
                                 success: (response) => {
                                     var departureairport = response.name;
                                     flightinfo.append("Depart at: " + departureairport + "  |  ")
-                                }
+                                },
+                                async: false
                             })
 
                             var arrivalid = response.arrival_id;
@@ -274,62 +275,43 @@ var build_mytrip_interface = function () {
                                 success: (response) => {
                                     var arrivalairport = response.name;
                                     flightinfo.append("Arrive at: " + arrivalairport)
-                                }
+                                },
+                                async: false
                             })
+                            $.ajax(root_url + 'tickets?filter[instance_id]=' + instanceid,
+                                {
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    xhrFields: { withCredentials: true },
+                                    success: (response) => {
+                                        for (let res of response) {
+                                            //console.log(instanceid);
+                                            //console.log(response[k].first_name);
 
+                                            //for (var k = 0; k < response.length; k++) {
+                                            //var count = k + 1;
+                                            //personal information
 
-
+                                            $(personalinfo).append("<div>"
+                                                + "Name: " + res.first_name + " " + res.last_name
+                                                + "  Gender: " + res.gender
+                                                + "  Age: " + res.age + "</br>"
+                                                + "  Price: " + res.price_paid
+                                                + "  Itinery ID: " + res.itinerary_id + "</br></div>");
+                                        }
+                                    },
+                                    async: false
+                                });
+                            $('body')
+                                .append(flightinfo)
+                                .append(personalinfo);
                         },
                         async: false
-
-
                     }
                     );
-
-                    $.ajax(root_url + 'tickets?filter[instance_id]=' + instanceid,
-                        {
-                            type: 'GET',
-                            dataType: 'json',
-                            xhrFields: { withCredentials: true },
-                            success: (response) => {
-                                for (var k = 0; k < i; k++) {
-                                    //console.log(instanceid);
-                                    //console.log(response[k].first_name);
-
-                                    //for (var k = 0; k < response.length; k++) {
-                                    //var count = k + 1;
-                                    //personal information
-
-                                    $(personalinfo).append("<div>"
-                                        + "Name: " + response[k].first_name + " " + response[k].last_name
-                                        + "  Gender: " + response[k].gender
-                                        + "  Age: " + response[k].age + "</br>"
-                                        + "  Price: " + response[k].price_paid
-                                        + "  Itinery ID: " + response[k].itinerary_id + "</br></div>");
-
-
-
-                                }
-                            }
-
-
-                        });
-
-
-                    $('body')
-                        .append(flightinfo)
-                        .append(personalinfo);
-
-
-
                 }
             }
         })
     }
     );
-
-
-
-
-
 }
