@@ -4,6 +4,7 @@ var root_url = "http://comp426.cs.unc.edu:3001/";
 var departure, destination, date_go, date_back;
 var selected, selected_go, selected_back; //variables for recording selected flights_id onchange of input radio
 var planeResult;
+
 //use input text to search corresponding departure and arrival airport
 var search_flight = function() {
   departure = $("#departure").val();            //get values of each input text
@@ -57,6 +58,8 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
   var k = 0;
   for (var i = 0; i < departure_array.length; i++){
     for (var j = 0; j< arrival_array.length; j++){
+      var dname = departure_array[i].name;
+      var aname = arrival_array[j].name;
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
@@ -83,7 +86,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
                 find_airline(response[count].airline_id, k, time, "#general_", departure, destination);
-                addDetails(response[count],'#result_'+k,k,departure,destination);
+                addDetails(response[count],'#result_'+k,k,departure,destination,dname,aname,date_go);
                 k++;
 
               }
@@ -93,7 +96,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
                 $(".results_go").append("<div class = 'result_go' id = 'result_go_" + k + "' ></div>");
-                $("#result_go_"+k).append("<div class = 'general' id = 'general_go_" + k + "' ></div>");
+                $("#result_go_"+k).append("<div class = 'general_go' id = 'general_go_" + k + "' ></div>");
                 let time = response[count].departs_at.substring(11, 16);
                 // add buttons for roundButtons for 'go'
                 id = '#general_go_'+k;
@@ -108,7 +111,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 time += " - ";
                 time += response[count].arrives_at.substring(11, 16);
                 find_airline(response[count].airline_id, k, time, "#general_go_", departure, destination);
-                addDetails(response[count],'#result_go_'+k,k,departure,destination);
+                addDetails(response[count],'#result_go_'+k,k,departure,destination,dname,aname,date_go);
                 k++;
               }
               $(".errormsg").html("");
@@ -126,9 +129,9 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
   }
   if(!oneWay){
     returnFlight(arrival_array,departure_array);
-    $(".result-container").after("<button class = 'submit' id = 'round'>Buy Now</button>");
+    $(".result-container").after("<button onclick = 'buyRoundtrip()' class = 'submit' id = 'round'>Buy Now</button>");
   } else {
-    $(".result-container").after("<button class = 'submit' id = 'one'>Buy Now</button>");
+    $(".result-container").after("<button onclick = 'buyOneway()' class = 'submit' id = 'one'>Buy Now</button>");
   }
 
 }
@@ -147,7 +150,7 @@ var find_airline = function(id, count, time, cname, depart, arrive){
       $(cname + count).prepend("<div class = 'flight_airline' id = 'flight_airline_" + count + "' >" + result + "</div>");
     },
     error: ()=>{
-      $(cname+count).remove();
+      $(cname+count).parent().remove();
     }
   });
 }
@@ -163,7 +166,6 @@ function change(){
     $(".roundtrip").show();
     oneWay = false;
   }
-
 
 }
 
@@ -190,6 +192,8 @@ function returnFlight(departure_array, arrival_array){
   var k = 0;
   for (var i = 0; i < departure_array.length; i++){
     for (var j = 0; j< arrival_array.length; j++){
+      var dname = departure_array[i].name;
+      var aname = arrival_array[j].name;
       $.ajax(root_url + "flights?filter[departure_id]=" + departure_array[i].id + "&filter[arrival_id]=" + arrival_array[j].id, {
         type: "GET",
         xhrFields: {withCredentials: true},
@@ -200,7 +204,7 @@ function returnFlight(departure_array, arrival_array){
             if (response.length!=0){
               for (var count = 0; count < response.length; count++){
                 $(".results_back").append("<div class = 'result_back' id = 'result_back_" + k + "' ></div>");
-                $("#result_back_"+k).append("<div class = 'general' id = 'general_back_" + k + "' ></div>");
+                $("#result_back_"+k).append("<div class = 'general_back' id = 'general_back_" + k + "' ></div>");
                 // Add buttons for selecting returning flights.
                 id = '#general_back_'+k;
                 if (k==1){
@@ -230,7 +234,7 @@ function returnFlight(departure_array, arrival_array){
                     //$(cname+count).remove();
                   }
                 });
-                addDetails(response[count],'#result_back_'+k,k,destination,departure);
+                addDetails(response[count],'#result_back_'+k,k,destination,departure,dname,aname,date_back);
                 k++;
 
               }
@@ -250,15 +254,16 @@ function returnFlight(departure_array, arrival_array){
 
 }
 
- function addDetails(response,id,k,depart, arrival){
+ function addDetails(response,id,k,depart, arrival, dname, aname, date){
    let time = response.departs_at.substring(11, 16);
    // response[count] single flight
    // add select buttons
+   let dateTime = "Date: " + date;
    let departTime = 'Departure Time: '+ response.departs_at.substring(11,16);
    let arrTime = 'Arrival Time: '+ response.arrives_at.substring(11,16);
    let flightNumber = 'Flight Number: ' + response.number;
-   let depart1 = 'Departure Airport: ' + depart;
-   let destin = 'Destination Airport: '+ arrival;
+   let depart1 = 'Departure Airport: ' + dname + " (" + depart + ")";
+   let destin = 'Destination Airport: '+ aname + " (" + arrival + ")";
    let departHour = parseInt(response.departs_at.substring(11,13))*60;
    let departMin = parseInt(response.departs_at.substring(14,16))
    let t1 = departHour + departMin;
@@ -291,6 +296,7 @@ function returnFlight(departure_array, arrival_array){
    let detailDiv = $('<div class="details" id="details_'+k+'" ></div>')
    $(id).append(detailDiv);
    //findPlaneInfo(planeId,'details_'+k);
+   let dateDiv = $('<div>'+dateTime+'</div>');
    let departTimeDiv = $('<div>'+departTime+'</div>');
    let arrivalTimeDiv = $('<div>'+arrTime+'</div>');
    let flightNumberDiv = $('<div>'+flightNumber+'</div>');
@@ -299,9 +305,10 @@ function returnFlight(departure_array, arrival_array){
    let timeLastDiv = $('<div>'+timeLast+'</div>');
    //let planeDiv = $('<div>'+ haha +'</div>');
 
-   findPlaneInfo(planeId,'#details_'+k);
+   findPlaneInfo(planeId,'#details_'+k, id);
 
    //detailDiv.append(planeDiv);
+   detailDiv.append(dateDiv);
    detailDiv.append(departTimeDiv);
    detailDiv.append(arrivalTimeDiv);
    detailDiv.append(flightNumberDiv);
@@ -321,22 +328,19 @@ function returnFlight(departure_array, arrival_array){
  //recording flight_id of every change on input radio
  this.selectFlight_go = function(flight_id){
    selected_go = flight_id;
-   console.log(flight_id);
  }
 
   //recording flight_id of every change on input radio
  this.selectFlight = function(flight_id){
    selected = flight_id;
-   console.log(flight_id);
  }
 
   //recording flight_id of every change on input radio
  this.selectFlight_back = function(flight_id){
    selected_back = flight_id;
-   console.log(flight_id);
  }
 
- function findPlaneInfo(planeID,id){
+ function findPlaneInfo(planeID,id, parentId){
    $.ajax(root_url + "planes/" + planeID, {
      type: "GET",
      xhrFields: {withCredentials: true},
@@ -345,7 +349,7 @@ function returnFlight(departure_array, arrival_array){
        //when(r.name)
        planeResult = r.name;
        //alert(planeResult);
-       $(id).append('<div>Plane: '+planeResult+'</div> ');
+       $(parentId).find(id).append('<div>Plane: '+planeResult+'</div> ');
 
        //alert('jerry')
        //alert(result);
@@ -356,4 +360,71 @@ function returnFlight(departure_array, arrival_array){
        //$(cname+count).remove();
      }
    });
+ }
+
+ //post instance with date and flight id for oneway trip
+ this.buyOneway = function(){
+  //  "instance": {
+  //   "flight_id": 1,
+  //   "date":      "2018-12-21"
+   var instance = {"instance": {
+     "flight_id" : selected,
+     "date": date_go
+     }
+   };
+   var instanceId_array = [];
+   $.ajax(root_url + "instances", {
+     type: "POST",
+     xhrFields: {withCredentials: true},
+     data: instance,
+     async: false,
+     success: (response) => {
+       instanceId_array.push(response.id);
+     },
+     error: () => {
+       alert("Please check your internet connection.");
+     }
+   });
+   console.log(instanceId_array);
+
+ }
+
+ //post two instances (go and back) for round trip
+ this.buyRoundtrip = function(){
+   var instance_go = {"instance": {
+     "flight_id" : selected_go,
+     "date": date_go
+     }
+   };
+   var instanceId_array = [];
+   $.ajax(root_url + "instances", {
+     type: "POST",
+     xhrFields: {withCredentials: true},
+     data: instance_go,
+     async: false,
+     success: (response) => {
+       instanceId_array.push(response.id);
+     },
+     error: () => {
+       alert("Please check your internet connection.");
+     }
+   });
+   var instance_back = {"instance": {
+     "flight_id" : selected_back,
+     "date": date_back
+     }
+   };
+   $.ajax(root_url + "instances", {
+     type: "POST",
+     xhrFields: {withCredentials: true},
+     data: instance_back,
+     async: false,
+     success: (re) => {
+       instanceId_array.push(re.id);
+     },
+     error: () => {
+       alert("Please check your internet connection.");
+     }
+   });
+   console.log(instanceId_array);
  }
