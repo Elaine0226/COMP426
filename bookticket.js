@@ -229,90 +229,115 @@ var build_mytrip_interface = function () {
 
     $(document).ready(function () {
 
-        $.ajax(root_url + 'instances', {
+        $.ajax(root_url + 'tickets', {
             type: 'GET',
             xhrFields: { withCredentials: true },
             dataType: 'json',
             success: (response) => {
-                for (var i = 0; i < 2; i++) { //change to response.length
-                    //var i = 0;
-                    var instanceflightID = response[i].flight_id;
-                    var instanceid = response[i].id;
-                    var flightdate = response[i].date;
-                    //console.log(instanceid);
+                for (let resticket of response) {
+                    resticket_instance = resticket.instance_id;
+                    //console.log(resticket)
 
-                    let flightinfo = $('<div class="flightinfo"></div>');
-                    let personalinfo = $('<div class="personalinfo"> </div>');
-                    $.ajax(root_url + 'flights/' + instanceflightID, {
+                    $.ajax(root_url + 'instances/' + resticket_instance, {
                         type: 'GET',
                         xhrFields: { withCredentials: true },
                         dataType: 'json',
                         success: (response) => {
+                            //for (var i = 0; i < response.length; i++) { //change to response.length
+                            //var i = 0;
+                            console.log(response);
+                            var instanceflightID = response.flight_id;
+                            var instanceid = response.id;
+                            var flightdate = response.date;
+                            //console.log(instanceid);
 
-                            //console.log(response.arrives_at.substring(0, 10));
+                            let flightinfo = $('<div class="flightinfo"></div>');
+                            let personalinfo = $('<div class="personalinfo"> </div>');
 
-                            flightinfo.append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
-                                + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>")
 
-                            var departureid = response.departure_id;
-
-                            $.ajax(root_url + 'airports/' + departureid, {
+                            $.ajax(root_url + 'flights/' + instanceflightID, {
                                 type: 'GET',
                                 xhrFields: { withCredentials: true },
                                 dataType: 'json',
                                 success: (response) => {
-                                    var departureairport = response.name;
-                                    flightinfo.append("Depart at: " + departureairport + "  |  ")
+
+                                    //console.log(response.arrives_at.substring(0, 10));
+
+                                    flightinfo.append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
+                                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>")
+
+                                    var departureid = response.departure_id;
+
+                                    $.ajax(root_url + 'airports/' + departureid, {
+                                        type: 'GET',
+                                        xhrFields: { withCredentials: true },
+                                        dataType: 'json',
+                                        success: (response) => {
+                                            var departureairport = response.name;
+                                            flightinfo.append("Depart at: " + departureairport + "  |  ")
+                                        },
+                                        async: false
+                                    })
+
+                                    var arrivalid = response.arrival_id;
+
+                                    $.ajax(root_url + 'airports/' + arrivalid, {
+                                        type: 'GET',
+                                        xhrFields: { withCredentials: true },
+                                        dataType: 'json',
+                                        success: (response) => {
+                                            var arrivalairport = response.name;
+                                            flightinfo.append("Arrive at: " + arrivalairport)
+                                        },
+                                        async: false
+                                    })
+                                    $.ajax(root_url + 'tickets?filter[instance_id]=' + instanceid,
+                                        {
+                                            type: 'GET',
+                                            dataType: 'json',
+                                            xhrFields: { withCredentials: true },
+                                            success: (response) => {
+                                                for (let res of response) {
+                                                    //console.log(instanceid);
+                                                    //console.log(response[k].first_name);
+
+                                                    //for (var k = 0; k < response.length; k++) {
+                                                    //var count = k + 1;
+                                                    //personal information
+
+                                                    $(personalinfo).append("<div>"
+                                                        + "Name: " + res.first_name + " " + res.last_name
+                                                        + "  Gender: " + res.gender
+                                                        + "  Age: " + res.age + "</br>"
+                                                        + "  Instance ID: " + res.instance_id + "<br><br>" + "</div>");
+                                                    //+ "  Itinery ID: " + res.itinerary_id + "</br></div>");
+                                                }
+                                            },
+                                            async: false
+                                        });
+                                    $('body')
+                                        .append(flightinfo)
+                                        .append(personalinfo);
                                 },
                                 async: false
-                            })
+                            }
+                            );
+                            //}
+                        }
+                    })
 
-                            var arrivalid = response.arrival_id;
 
-                            $.ajax(root_url + 'airports/' + arrivalid, {
-                                type: 'GET',
-                                xhrFields: { withCredentials: true },
-                                dataType: 'json',
-                                success: (response) => {
-                                    var arrivalairport = response.name;
-                                    flightinfo.append("Arrive at: " + arrivalairport)
-                                },
-                                async: false
-                            })
-                            $.ajax(root_url + 'tickets?filter[instance_id]=' + instanceid,
-                                {
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    xhrFields: { withCredentials: true },
-                                    success: (response) => {
-                                        for (let res of response) {
-                                            //console.log(instanceid);
-                                            //console.log(response[k].first_name);
-
-                                            //for (var k = 0; k < response.length; k++) {
-                                            //var count = k + 1;
-                                            //personal information
-
-                                            $(personalinfo).append("<div>"
-                                                + "Name: " + res.first_name + " " + res.last_name
-                                                + "  Gender: " + res.gender
-                                                + "  Age: " + res.age + "</br>"
-                                                + "  Price: " + res.price_paid
-                                                + "  Itinery ID: " + res.itinerary_id + "</br></div>");
-                                        }
-                                    },
-                                    async: false
-                                });
-                            $('body')
-                                .append(flightinfo)
-                                .append(personalinfo);
-                        },
-                        async: false
-                    }
-                    );
                 }
             }
-        })
+        }
+
+
+
+        )
+
+
+
+
     }
     );
 }
