@@ -70,53 +70,50 @@ var build_purchase_interface = function (instanceId_array) {
 
         $(this).removeClass('unpurchased').addClass('purchased');
 
-
-        $.ajax(root_url + 'itineraries', {
-            type: 'POST',
-            xhrFields: { withCredentials: true },
-            data: {
-                "itinerary": {
-                    "email": $("#email").val(),
+        for (let instanceId of instanceId_array) {
+            $.ajax(root_url + 'itineraries', {
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    "itinerary": {
+                        "email": $("#email").val(),
+                    }
+                },
+                success: {
                 }
-            },
-            success: {
-            }
 
-        });
+            });
 
-
-        $.ajax(root_url + 'tickets', {
-            type: 'POST',
-            xhrFields: { withCredentials: true },
-            data: {
-                "ticket": {
-                    "first_name": $("#firstName").val(),
-                    "middle_name": $("#middleName").val(),
-                    "last_name": $("#lastName").val(),
-                    "age": parseInt($("#age").val(), 10),
-                    "gender": $("input[name='gender']:checked").val(),
-                    "is_purchased": true,
-                    "instance_id": parseInt($("#instanceID").val(), 10),
-                    "seat_id": parseInt($("#seatID").val(), 10),
+            $.ajax(root_url + 'tickets', {
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    "ticket": {
+                        "first_name": $("#firstName").val(),
+                        "middle_name": $("#middleName").val(),
+                        "last_name": $("#lastName").val(),
+                        "age": parseInt($("#age").val(), 10),
+                        "gender": $("input[name='gender']:checked").val(),
+                        "is_purchased": true,
+                        "instance_id": instanceId.id, //roundtrip post两个instanceid
+                        "seat_id": parseInt($("#seatID").val(), 10),
+                    }
+                },
+                success: function (build_mytrip_interface) {
+                    console.log(instanceId.id);
+                    alert("Purchased!");
                 }
-            },
-            success: function (build_mytrip_interface) {
-                alert("Purchased!");
-            }
 
 
-        });
-
-    });
+            });
 
 
-    //numberonly not working
-    $(".numberonly").on("keypress keyup blur", function (event) {
-        $(this).val($(this).val().replace(/[^\d].+/, ""));
-        if ((event.which < 48 || event.which > 57)) {
-            event.preventDefault();
         }
+
+
     });
+
+
 
 
     //print search result instance
@@ -138,8 +135,8 @@ var build_purchase_interface = function (instanceId_array) {
                 //console.log(response.arrives_at.substring(0, 10));
 
                 flightinfo
-                    .append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
-                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>");
+                    .append("Departure: " + flightdate + " " + response.departs_at.substring(11, 16)
+                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(11, 16) + "</br>");
 
                 var departureid = response.departure_id;
                 var departureairport;
@@ -214,7 +211,6 @@ var build_mytrip_interface = function () {
     let mytripbtn = $('<input type="button" class = "myTrips" onclick = "myTrips()" value="My Trips"></input>');
     nav.append(mytripbtn)
 
-    //nav.append('<button class="log">Log In</button>')
     $('body')
         .append(nav)
 
@@ -236,20 +232,16 @@ var build_mytrip_interface = function () {
             success: (response) => {
                 for (let resticket of response) {
                     resticket_instance = resticket.instance_id;
-                    //console.log(resticket)
 
                     $.ajax(root_url + 'instances/' + resticket_instance, {
                         type: 'GET',
                         xhrFields: { withCredentials: true },
                         dataType: 'json',
                         success: (response) => {
-                            //for (var i = 0; i < response.length; i++) { //change to response.length
-                            //var i = 0;
-                            console.log(response);
+
                             var instanceflightID = response.flight_id;
                             var instanceid = response.id;
                             var flightdate = response.date;
-                            //console.log(instanceid);
 
                             let flightinfo = $('<div class="flightinfo"></div>');
                             let personalinfo = $('<div class="personalinfo"> </div>');
@@ -261,10 +253,9 @@ var build_mytrip_interface = function () {
                                 dataType: 'json',
                                 success: (response) => {
 
-                                    //console.log(response.arrives_at.substring(0, 10));
 
-                                    flightinfo.append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
-                                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>")
+                                    flightinfo.append("Departure: " + flightdate + " " + response.departs_at.substring(11, 16)
+                                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(11, 16) + "</br>")
 
                                     var departureid = response.departure_id;
 
@@ -298,12 +289,7 @@ var build_mytrip_interface = function () {
                                             xhrFields: { withCredentials: true },
                                             success: (response) => {
                                                 for (let res of response) {
-                                                    //console.log(instanceid);
-                                                    //console.log(response[k].first_name);
 
-                                                    //for (var k = 0; k < response.length; k++) {
-                                                    //var count = k + 1;
-                                                    //personal information
 
                                                     $(personalinfo).append("<div>"
                                                         + "Name: " + res.first_name + " " + res.last_name
