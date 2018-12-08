@@ -24,7 +24,6 @@ var build_purchase_interface = function (instanceId_array) {
     let nav = $('<div class="nav_div"> </div>');
     nav.append('<button class = "home" onclick="home()"> Home </button>')
     nav.append('<button class="myTrips">My Trips</button>')
-    nav.append('<button class="log">Log In</button>')
 
 
     let body = $('body');
@@ -209,7 +208,6 @@ var build_mytrip_interface = function () {
     let mytripbtn = $('<input type="button" class = "myTrips" value="My Trips"></input>');
     nav.append(mytripbtn)
 
-    nav.append('<button class="log">Log In</button>')
     $('body')
         .append(nav)
 
