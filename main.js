@@ -7,8 +7,8 @@ var planeResult;
 
 //use input text to search corresponding departure and arrival airport
 var search_flight = function() {
-  departure = $("#departure").val();            //get values of each input text
-  destination = $("#destination").val();
+  departure = $("#departure").val().toUpperCase();            //get values of each input text
+  destination = $("#destination").val().toUpperCase();
   date_go = $(".oneway").val();
   date_back = $(".roundtrip").val();
   var departure_array, arrival_array;
