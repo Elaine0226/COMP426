@@ -3,19 +3,20 @@ var root_url = "http://comp426.cs.unc.edu:3001/";
 
 //clean all after click book button, build_purchase_interface
 
-
-$(document).ready(function () {
-    $(".search").click(function () {
-        build_purchase_interface();
-    });
-});
+// $(document).ready(function () {
+//     $(".search").click(function () {
+//         build_purchase_interface();
+//     });
+// });
 
 // go to my trip page
-$(document).ready(function () {
-    $(".myTrips").click(function () {
-        build_mytrip_interface();
-    });
-});
+
+
+// $(document).ready(function () {
+//     $(".myTrips").click(function () {
+//         build_mytrip_interface();
+//     });
+// });
 
 
 
@@ -24,7 +25,8 @@ $(document).ready(function () {
 var build_purchase_interface = function (instanceId_array) {
     let nav = $('<div class="nav_div"> </div>');
     nav.append('<button class = "home" onclick="home()"> Home </button>')
-    nav.append('<button class="myTrips">My Trips</button>')
+    nav.append('<button class="myTrips" onclick = "myTrips()">My Trips</button>')
+    // nav.append('<button class="log">Log In</button>')
 
 
     let body = $('body');
@@ -99,7 +101,6 @@ var build_purchase_interface = function (instanceId_array) {
                 }
             },
             success: function (build_mytrip_interface) {
-                console.log(build_mytrip_interface);
                 alert("Purchased!");
             }
 
@@ -119,12 +120,12 @@ var build_purchase_interface = function (instanceId_array) {
 
 
     //print search result instance
-    let searchResults = $('<div class="searchResults">Search Results: </div>');
+    let searchResults = $('<div class="searchResults">The ticket you just booked: </div>');
 
     for (var i = 0; i < instanceId_array.length; i++) { //change to array.length
         //var i = 0;
         var instanceflightID = instanceId_array[i].flight_id;
-
+        var flightdate = instanceId_array[i].date;
 
 
         $.ajax(root_url + 'flights/' + instanceflightID, {
@@ -136,18 +137,21 @@ var build_purchase_interface = function (instanceId_array) {
                 var flightinfo = $('<div class="flightinfo"></div>');
                 //console.log(response.arrives_at.substring(0, 10));
 
-                flightinfo.append("Departure: " + response.departs_at.substring(0, 10) + " " + response.departs_at.substring(12, 16)
-                    + "  | Arrival: " + response.arrives_at.substring(0, 10) + " " + response.arrives_at.substring(12, 16) + "</br>")
+                flightinfo
+                    .append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
+                        + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>");
 
                 var departureid = response.departure_id;
+                var departureairport;
+                var arrivalairport;
 
                 $.ajax(root_url + 'airports/' + departureid, {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
                     success: (response) => {
-                        var departureairport = response.name;
-                        flightinfo.append("Depart at: " + departureairport + "  |  ")
+                        departureairport = response.name;
+
                     }
                 })
 
@@ -158,8 +162,9 @@ var build_purchase_interface = function (instanceId_array) {
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
                     success: (response) => {
-                        var arrivalairport = response.name;
-                        flightinfo.append("Arrive at: " + arrivalairport)
+                        arrivalairport = response.name;
+                        flightinfo.append("Depart at: " + departureairport + "  |  ")
+                        flightinfo.append("Arrive at: " + arrivalairport);
                     }
                 })
 
@@ -206,9 +211,10 @@ var build_mytrip_interface = function () {
     let nav = $('<div class="nav_div"> </div>');
     nav.append('<button class = "home" onclick="home()"> Home </button>')
 
-    let mytripbtn = $('<input type="button" class = "myTrips" value="My Trips"></input>');
+    let mytripbtn = $('<input type="button" class = "myTrips" onclick = "myTrips()" value="My Trips"></input>');
     nav.append(mytripbtn)
 
+    //nav.append('<button class="log">Log In</button>')
     $('body')
         .append(nav)
 
@@ -232,6 +238,7 @@ var build_mytrip_interface = function () {
                     //var i = 0;
                     var instanceflightID = response[i].flight_id;
                     var instanceid = response[i].id;
+                    var flightdate = response[i].date;
                     //console.log(instanceid);
 
                     let flightinfo = $('<div class="flightinfo"></div>');
@@ -244,8 +251,8 @@ var build_mytrip_interface = function () {
 
                             //console.log(response.arrives_at.substring(0, 10));
 
-                            flightinfo.append("Departure: " + response.departs_at.substring(0, 10) + " " + response.departs_at.substring(12, 16)
-                                + "  | Arrival: " + response.arrives_at.substring(0, 10) + " " + response.arrives_at.substring(12, 16) + "</br>")
+                            flightinfo.append("Departure: " + flightdate + " " + response.departs_at.substring(12, 16)
+                                + "  | Arrival: " + flightdate + " " + response.arrives_at.substring(12, 16) + "</br>")
 
                             var departureid = response.departure_id;
 
@@ -308,4 +315,8 @@ var build_mytrip_interface = function () {
         })
     }
     );
+}
+
+var myTrips = function () {
+    build_mytrip_interface();
 }
