@@ -3,6 +3,7 @@ var root_url = "http://comp426.cs.unc.edu:3001/";
 
 //clean all after click book button, build_purchase_interface
 
+
 $(document).ready(function () {
     $(".search").click(function () {
         build_purchase_interface();
