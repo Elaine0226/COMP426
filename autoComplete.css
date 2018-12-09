@@ -1,0 +1,35 @@
+.ui-helper-hidden-accessible{
+    display: none;
+}
+
+li{
+    list-style-type: none;
+    overflow: hidden;
+    border-bottom: 1px solid lightgrey;
+    font-size: 17px;
+}
+
+#ui-id-1{
+    width: 12%;
+    height: auto;
+    font-size: 15px;
+    background-color: white;
+    text-align: left;
+    border: 2px solid grey;
+    padding: 2px;
+}
+
+#ui-id-2{
+    width: 12%;
+    height: auto;
+    font-size: 15px;
+    background-color: white;
+    text-align: left;
+    border: 2px solid grey;
+    padding: 2px;
+    
+}
+
+li:hover{
+    background-color: aliceblue;
+}
