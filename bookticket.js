@@ -45,14 +45,11 @@ var build_purchase_interface = function (instanceId_array) {
     lastName.append('<input type="text" name="lastName" id="lastName" placeholder="Put your last name" required></br>');
 
     let age = $('<div class="age">Age: </div>');
-    age.append('<input type="text" name="numeric" id = "age" class="numberonly" placeholder = "Your age" required>');
+    age.append('<input type="number" name="numeric" id = "age" class="numberonly" placeholder = "Your age" required>');
 
     let gender = $('<div class="gender">Gender: </div>');
     gender.append('<label><input type="radio" name="gender" value="male" required> Male</label> ')
     gender.append('<label><input type="radio" name="gender" value="female" required >Female</label>')
-
-    let instanceID = $('<div class="instanceID">Instance ID: </div>');
-    instanceID.append('<input type="text" name="instanceID" id="instanceID" class = "numberonly" placeholder="Put your instance ID"></br>')
 
     let seatID = $('<div class="seatID">Seat ID: </div>');
     seatID.append('<input type="text" name="seatID" id="seatID" class = "numberonly" placeholder="Put your seat ID"></br>')
@@ -129,6 +126,7 @@ var build_purchase_interface = function (instanceId_array) {
             type: 'GET',
             xhrFields: { withCredentials: true },
             dataType: 'json',
+            async: false, 
             success: (response) => {
 
                 var flightinfo = $('<div class="flightinfo"></div>');
@@ -146,6 +144,7 @@ var build_purchase_interface = function (instanceId_array) {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
+                    async: false, 
                     success: (response) => {
                         departureairport = response.name;
 
@@ -158,6 +157,7 @@ var build_purchase_interface = function (instanceId_array) {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
+                    async: false, 
                     success: (response) => {
                         arrivalairport = response.name;
                         flightinfo.append("Depart at: " + departureairport + "  |  ")
@@ -189,7 +189,6 @@ var build_purchase_interface = function (instanceId_array) {
         .append(lastName)
         .append(age)
         .append(gender)
-        .append(instanceID)
         .append(seatID)
         .append(email)
         .append(purchaseBtn)
@@ -208,7 +207,7 @@ var build_mytrip_interface = function () {
     let nav = $('<div class="nav_div"> </div>');
     nav.append('<button class = "home" onclick="home()"> Home </button>')
 
-    let mytripbtn = $('<input type="button" class = "myTrips" onclick = "myTrips()" value="My Trips"></input>');
+    let mytripbtn = $('<button class="myTrips" onclick="myTrips()">My Trips</button>');
     nav.append(mytripbtn)
 
     $('body')

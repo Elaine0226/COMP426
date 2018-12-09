@@ -1,0 +1,292 @@
+body {
+    position: relative;
+    text-align: center;
+}
+
+.nav_div {
+    position: fixed;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 40px;
+    text-align: right;
+    background-color: rgb(38, 41, 48);
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.myTrips{
+    margin-right: 3%;
+    margin-left: 10px;
+}
+
+.nav_div button{
+    background-color:transparent;
+    margin-top: 10px;
+    border: none;
+    font-size: 17px;
+    font-family: "Times new Roman";
+    vertical-align:top;
+    color:white;
+    outline: none;
+}
+
+.title{
+    font-size: 45px;
+    margin-top: 40px;
+    margin-bottom: 25px;
+}
+
+.search_div{
+    flex-direction: row;
+    padding: 20px;
+    width: 80%;
+    height: auto;
+    margin-left: 8%;
+    display: flex;
+    border: 2px solid grey;
+    padding-bottom: 25px;
+    background-color: white;
+}
+
+.search_div input {
+    width: 25%;
+    height: 40px;
+    margin: 5px;
+    font-size: 15px;
+    background-color: aliceblue;
+}
+
+.date {
+    margin-left: 10px;
+    height: 50px;
+    font-size: 15px;
+    width: 50%;
+    display: flex;
+}
+
+.date input{
+    width: 80%;
+    margin: 5px;
+    background-color: aliceblue;
+}
+
+
+.search_div select {
+    width: 20%;
+    height: 40px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 10px;
+    font-size: 15px;
+    background-color: white;
+}
+
+.date button{
+    width: 180px;
+    height: 40px;
+    background-color: white;
+    font-size: 18px;
+    margin-right: 1%;
+    margin-left: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.errormsg {
+    position: absolute;
+    color: red;
+    left: 12%;
+    margin-top: 55px;
+}
+
+.result-container{
+    display: flex;
+    width: 85%;
+    margin-top: 30px;
+    margin-left: 7%;
+}
+
+.results{
+    overflow-y: scroll;
+    width: 100%;
+    height: 80%;
+}
+
+.results_go{
+    overflow-y: scroll;
+    width: 50%;
+    height: 80%;
+    border-right: solid 1px lightgrey;
+}
+
+.results_back{
+    overflow-y: scroll;
+    width: 50%;
+    height: 80%;
+}
+
+.result-container h1{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.submit{
+    width: 200px;
+    height: 40px;
+    margin-top: 20px;
+    background-color: aliceblue;
+    font-size: 18px;
+}
+
+.general{
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.general_go{
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.general_back{
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.result{
+    margin: 10px;
+    padding: 10px;
+    width: 90%;
+    margin-left: 4%;
+    border: 2px solid lightgrey;
+    padding-bottom: 15px;
+}
+
+.result_go{
+    margin: 10px;
+    padding: 10px;
+    width: 90%;
+    margin-left: 4%;
+    border: 2px solid lightgrey;
+    padding-bottom: 15px;
+}
+
+.result_back{
+    margin: 10px;
+    padding: 10px;
+    width: 90%;
+    margin-left: 4%;
+    border: 2px solid lightgrey;
+    padding-bottom: 15px;
+}
+
+.general_go div{
+    width: 25%;
+    font-size: 18px;
+    margin: auto;
+}
+
+.general_back div{
+    width: 25%;
+    font-size: 18px;
+    margin: auto;
+}
+
+.general div{
+    width: 25%;
+    font-size: 18px;
+    margin: auto;
+}
+
+.general_go button{
+    width: 80px;
+    height: 6%;
+    background-color: aliceblue;
+    margin-left: 10px;
+    margin-right: 5%;
+    margin: auto;
+    font-size: 18px;
+    padding: 3px;
+}
+
+.general_back button{
+    width: 80px;
+    height: 6%;
+    background-color: aliceblue;
+    margin-left: 10px;
+    margin: auto;
+    font-size: 18px;
+    padding: 3px;
+}
+
+.general button{
+    width: 80px;
+    height: 6%;
+    background-color: aliceblue;
+    margin-left: 10px;
+    margin: auto;
+    font-size: 18px;
+    padding: 3px;
+}
+
+.details{
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid lightgrey;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.searchResults{
+    margin-top: 50px;
+    text-align: left;
+    font-size: 22px;
+    margin-bottom: 10px;
+    margin-left: 10%; 
+    margin-right: auto;
+}
+
+.flightinfo{
+    margin-top: 10px;
+    border: 2px solid grey;
+    padding: 10px;
+    font-size: 20px;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#myInfo{
+    font-size: 20px;
+    text-align: left;
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#myInfo input{
+    width: 200px;
+    height: 40px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 18px;
+}
+
+#myInfo label input{
+    width: auto;
+    height: auto;
+}
+
+

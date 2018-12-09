@@ -76,7 +76,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 $("#result_"+k).append("<div class = 'general' id = 'general_" + k + "' ></div>");
                 id = '#general_'+k;
                 //add buttons for oneway
-                if(k==1){
+                if(k==0){
                   $(id).before("<input type='radio' onchange='selectFlight(" + response[count].id + ")' id='oneWay_go_"+k+"' class='oneWay_go_' name='oneWay_go_button' checked>");
                   selected = response[count].id;
                 }else{
@@ -101,7 +101,7 @@ var result_page = function(departure_array, arrival_array, departure, destinatio
                 let time = response[count].departs_at.substring(11, 16);
                 // add buttons for roundButtons for 'go'
                 id = '#general_go_'+k;
-                if(k==1){
+                if(k==0){
                     $(id).before("<input onchange='selectFlight_go(" + response[count].id + ")' type='radio' id='roundTrip_go_" + k + "' class='roundTrip_go' name='roundTrip_go_button' checked>");
                     selected_go = response[count].id;
                 }
@@ -215,7 +215,7 @@ function returnFlight(departure_array, arrival_array){
                 $("#result_back_"+k).append("<div class = 'general_back' id = 'general_back_" + k + "' ></div>");
                 // Add buttons for selecting returning flights.
                 id = '#general_back_'+k;
-                if (k==1){
+                if (k==0){
                   $(id).before("<input type='radio' onchange='selectFlight_back(" + response[count].id + ")' id='roundTrip_back_"+ k + "' class='roundTrip_back' name='roundTrip_back_button' checked>");
                   selected_back = response[count].id;
                 }
