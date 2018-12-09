@@ -149,15 +149,24 @@ h1{
     font-size: 18px;
     color:white;
 }
-.unpurchased{
+.purchased{
     width: 200px;
+    height: 40px;
+    margin-top: 20px;
+    background-color: gray;
+    font-size: 18px;
+    color:white;
+}
+
+
+.unpurchased{
+width: 200px;
     height: 40px;
     margin-top: 20px;
     background-color: #F08080;
     font-size: 18px;
     color:white;
 }
-
 .general{
     display: flex;
     margin-bottom: 10px;
