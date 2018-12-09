@@ -1,6 +1,10 @@
 body {
     position: relative;
     text-align: center;
+        font-family: Lato;
+        
+        background-image: url("background-2.jpeg");
+
 }
 
 .nav_div {
@@ -10,7 +14,7 @@ body {
     width: 100%;
     height: 40px;
     text-align: right;
-    background-color: rgb(38, 41, 48);
+    background-color: transparent;
     z-index: 1;
     top: 0;
     left: 0;
@@ -25,17 +29,18 @@ body {
     background-color:transparent;
     margin-top: 10px;
     border: none;
-    font-size: 17px;
-    font-family: "Times new Roman";
+    font-size: 20px;
+    /* font-family: "Times new Roman"; */
     vertical-align:top;
-    color:white;
+    color:whitesmoke;
     outline: none;
 }
 
-.title{
+h1{
     font-size: 45px;
-    margin-top: 40px;
-    margin-bottom: 25px;
+    margin-top: 80px;
+    color: white ;
+    /* margin-bottom: 25px; */
 }
 
 .search_div{
@@ -81,13 +86,13 @@ body {
     margin-left: 5px;
     margin-right: 10px;
     font-size: 15px;
-    background-color: white;
+    background-color: whitesmoke;
 }
 
 .date button{
     width: 180px;
     height: 40px;
-    background-color: white;
+    background-color: whitesmoke;
     font-size: 18px;
     margin-right: 1%;
     margin-left: 20px;
@@ -105,7 +110,7 @@ body {
 .result-container{
     display: flex;
     width: 85%;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-left: 7%;
 }
 
@@ -120,12 +125,14 @@ body {
     width: 50%;
     height: 80%;
     border-right: solid 1px lightgrey;
+    padding-right:20px;
 }
 
 .results_back{
     overflow-y: scroll;
     width: 50%;
     height: 80%;
+    padding-right:20px;
 }
 
 .result-container h1{
@@ -138,8 +145,17 @@ body {
     width: 200px;
     height: 40px;
     margin-top: 20px;
-    background-color: aliceblue;
+    background-color: #F08080;
     font-size: 18px;
+    color:white;
+}
+.unpurchased{
+    width: 200px;
+    height: 40px;
+    margin-top: 20px;
+    background-color: #F08080;
+    font-size: 18px;
+    color:white;
 }
 
 .general{
@@ -167,6 +183,9 @@ body {
     margin-left: 4%;
     border: 2px solid lightgrey;
     padding-bottom: 15px;
+
+    background:white;
+    color:#5673a3;
 }
 
 .result_go{
@@ -176,6 +195,8 @@ body {
     margin-left: 4%;
     border: 2px solid lightgrey;
     padding-bottom: 15px;
+    background:white;
+    color:#5673a3;
 }
 
 .result_back{
@@ -185,6 +206,8 @@ body {
     margin-left: 4%;
     border: 2px solid lightgrey;
     padding-bottom: 15px;
+    background:white;
+    color:#5673a3;
 }
 
 .general_go div{
@@ -245,33 +268,81 @@ body {
     margin-right: auto;
 }
 
-/* .searchResults{
+
+
+.ticket_just_booked{
+    font-size:30px;
+    color:whitesmoke;
+}
+.searchResults{
+    color: whitesmoke;
     margin-top: 50px;
-    text-align: left;
+    text-align: center;
     font-size: 22px;
     margin-bottom: 10px;
     margin-left: 10%; 
     margin-right: auto;
 }
 
-.flightinfo{
-    margin-top: 10px;
-    border: 2px solid grey;
-    padding: 10px;
+
+
+
+.flightinfopurchase{
+    margin: 20px;
+    border: 1px solid darkgray;
+    background-color: whitesmoke;
+    color: #5673a3;
+    padding: 20px;
     font-size: 20px;
     width: 80%;
     margin-right: auto;
     margin-left: auto;
+    text-align:center;
+
+     
+}
+
+.flightinfo{
+    margin-top: 30px;
+    border-top: 1px solid rgb(94, 93, 93);
+    border-left:1px solid rgb(94, 93, 93);
+    border-right: 1px solid rgb(94, 93, 93);
+    background-color: whitesmoke;
+    color: #5673a3;
+    padding-top: 40px;
+    font-size: 20px;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    
+}
+
+.personalinfo{
+    border-bottom: 1px solid rgb(94, 93, 93);
+    border-left:1px solid rgb(94, 93, 93);
+    border-right: 1px solid rgb(94, 93, 93);    
+    background-color: whitesmoke;
+    color: #5673a3;
+    padding-top:20px;
+    font-size: 18px;
+    width:80%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+    
 }
 
 #myInfo{
+
     font-size: 20px;
-    text-align: left;
+    text-align: center;
     width: 80%;
     margin-top: 15px;
     margin-bottom: 15px;
+
+
     margin-left: auto;
-    margin-right: auto;
+    margin-right:auto;
 }
 
 #myInfo input{
@@ -287,6 +358,14 @@ body {
 #myInfo label input{
     width: auto;
     height: auto;
-} */
+}
 
+.mytrip_page{
+    overflow-y: scroll;
+    width: 100%;
+    height: 90%;
+    border: solid 1px lightgrey;
+    margin-top: 60px;
+    
 
+}

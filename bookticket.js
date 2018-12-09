@@ -1,26 +1,7 @@
 var root = "http://comp426.cs.unc.edu:3001/";
 var root_url = "http://comp426.cs.unc.edu:3001/";
 
-//clean all after click book button, build_purchase_interface
 
-// $(document).ready(function () {
-//     $(".search").click(function () {
-//         build_purchase_interface();
-//     });
-// });
-
-// go to my trip page
-
-
-// $(document).ready(function () {
-//     $(".myTrips").click(function () {
-//         build_mytrip_interface();
-//     });
-// });
-
-
-
-//after click "Book"
 
 var build_purchase_interface = function (instanceId_array) {
     let nav = $('<div class="nav_div"> </div>');
@@ -34,22 +15,24 @@ var build_purchase_interface = function (instanceId_array) {
 
 
 
-    let firstName = $('<div class="firstName">First Name: </div>');
+    let firstName = $('<div class="firstName"> First Name: </div>');
     firstName.append('<input type="text" name="firstName" id="firstName" placeholder="Put your first name" required></br>');
 
-
-    let middleName = $('<div class="middleName">Middle Name: </div>');
+    let middleName = $('<div class="middleName"> Middle Name: </div>');
     middleName.append('<input type="text" name="middleName" id="middleName" placeholder="Put your middle name"></br>');
 
-    let lastName = $('<div class="lastName">Last Name: </div>');
+    let lastName = $('<div class="lastName"> Last Name: </div>');
     lastName.append('<input type="text" name="lastName" id="lastName" placeholder="Put your last name" required></br>');
 
     let age = $('<div class="age">Age: </div>');
-    age.append('<input type="number" name="numeric" id = "age" class="numberonly" placeholder = "Your age" required>');
+    age.append('<input type="text" name="numeric" id = "age" class="numberonly" placeholder = "Your age" required>');
 
     let gender = $('<div class="gender">Gender: </div>');
     gender.append('<label><input type="radio" name="gender" value="male" required> Male</label> ')
     gender.append('<label><input type="radio" name="gender" value="female" required >Female</label>')
+
+    let instanceID = $('<div class="instanceID">Instance ID: </div>');
+    instanceID.append('<input type="text" name="instanceID" id="instanceID" class = "numberonly" placeholder="Put your instance ID"></br>')
 
     let seatID = $('<div class="seatID">Seat ID: </div>');
     seatID.append('<input type="text" name="seatID" id="seatID" class = "numberonly" placeholder="Put your seat ID"></br>')
@@ -114,7 +97,8 @@ var build_purchase_interface = function (instanceId_array) {
 
 
     //print search result instance
-    let searchResults = $('<div class="searchResults">The ticket you just booked: </div>');
+    let searchResults = $('<div class="searchResults"></div>');
+    $(searchResults).append('<div class = "ticket_just_booked">Purchase Ticket in 24 Hours</div>');
 
     for (var i = 0; i < instanceId_array.length; i++) { //change to array.length
         //var i = 0;
@@ -126,10 +110,9 @@ var build_purchase_interface = function (instanceId_array) {
             type: 'GET',
             xhrFields: { withCredentials: true },
             dataType: 'json',
-            async: false, 
             success: (response) => {
 
-                var flightinfo = $('<div class="flightinfo"></div>');
+                var flightinfo = $('<div class="flightinfopurchase"></div>');
                 //console.log(response.arrives_at.substring(0, 10));
 
                 flightinfo
@@ -144,7 +127,6 @@ var build_purchase_interface = function (instanceId_array) {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
-                    async: false, 
                     success: (response) => {
                         departureairport = response.name;
 
@@ -157,7 +139,6 @@ var build_purchase_interface = function (instanceId_array) {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
-                    async: false, 
                     success: (response) => {
                         arrivalairport = response.name;
                         flightinfo.append("Depart at: " + departureairport + "  |  ")
@@ -176,22 +157,29 @@ var build_purchase_interface = function (instanceId_array) {
     }
 
 
+
+
+
+
     $('body')
         .append(nav)
-        .append(searchResults)//show search result
         .append("</br>")
-        .append('<form id="myInfo"></form>') //show personal information
+        .append("</br>")
+        .append(searchResults)
+        .append("</br>")
+        .append('<form id="myInfo"></form>');
 
     $('#myInfo')
-
         .append(firstName)
         .append(middleName)
         .append(lastName)
         .append(age)
         .append(gender)
+        //.append(instanceID)
         .append(seatID)
         .append(email)
-        .append(purchaseBtn)
+        .append(purchaseBtn);
+
 
 
 }
@@ -205,20 +193,21 @@ var build_mytrip_interface = function () {
     body.empty();
 
     let nav = $('<div class="nav_div"> </div>');
-    nav.append('<button class = "home" onclick="home()"> Home </button>')
+    nav.append('<button class = "home" onclick="home()">Home</button>')
 
-    let mytripbtn = $('<button class="myTrips" onclick="myTrips()">My Trips</button>');
+    let mytripbtn = $('<button class = "myTrips" onclick = "myTrips()">My Trips</button>');
     nav.append(mytripbtn)
 
     $('body')
         .append(nav)
+    //.append("My Purchased Trips:");
 
 
     let mytickets = $('<div class="mytickets">My tickets: </div>');
     let searchResults = $('<div class="searchResults"> </div>');
 
 
-
+    let mytrip_page = $('<div class="mytrip_page"></div>');
 
 
 
@@ -291,18 +280,24 @@ var build_mytrip_interface = function () {
 
 
                                                     $(personalinfo).append("<div>"
-                                                        + "Name: " + res.first_name + " " + res.last_name
-                                                        + "  Gender: " + res.gender
-                                                        + "  Age: " + res.age + "</br>"
+                                                        + "Name: " + res.first_name + res.middle_name + " " + res.last_name
+                                                        + "     " + "Gender: " + res.gender
+                                                        + "     " + "Age: " + res.age + "</br>"
                                                         + "  Instance ID: " + res.instance_id + "<br><br>" + "</div>");
                                                     //+ "  Itinery ID: " + res.itinerary_id + "</br></div>");
                                                 }
                                             },
                                             async: false
                                         });
-                                    $('body')
+
+                                    $(mytrip_page)
+
                                         .append(flightinfo)
                                         .append(personalinfo);
+                                    $('body')
+
+                                        .append(mytrip_page);
+
                                 },
                                 async: false
                             }
