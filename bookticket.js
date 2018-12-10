@@ -110,6 +110,7 @@ var build_purchase_interface = function (instanceId_array) {
             type: 'GET',
             xhrFields: { withCredentials: true },
             dataType: 'json',
+            async: false, 
             success: (response) => {
 
                 var flightinfo = $('<div class="flightinfopurchase"></div>');
@@ -127,6 +128,7 @@ var build_purchase_interface = function (instanceId_array) {
                     type: 'GET',
                     xhrFields: { withCredentials: true },
                     dataType: 'json',
+                    async: false, 
                     success: (response) => {
                         departureairport = response.name;
 
