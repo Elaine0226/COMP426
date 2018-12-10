@@ -7,11 +7,14 @@ function convertAirport(airport){
     async: false,
     success:(response)=>{
      data = response;
-     console.log(data[0].code);
      //return data[0].code;
+    }
+  })
+  if (data.length == 0){
+    return airport.toUpperCase();
+  } else{
+    return data[0].code;
   }
-})
-return data[0].code;
 }
 
    let airport = [];
