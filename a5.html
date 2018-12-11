@@ -26,7 +26,9 @@
 
   <div class="search_div">
     <input type="text" id='departure' placeholder="From City or Airport">
+    <button id='dep'>Tell me your departure</button>
     <input type="text" id='destination' placeholder="To City or Airport">
+    <button id='arr'>Tell me your destination</button>
     <select id='mySelect' onchange="change();">
       <option value="roundtrip">Roundtrip</option>
       <option value="oneway">One way</option>
@@ -41,7 +43,47 @@
   </div>
 
   <div class="result-container"></div>
+  <script>
+  /*
+    Cite: https://github.com/Nitij/JavaScriptSpeechRecognitionApi
+  */
+    var fromBoolean = true;
+    //var message = document.querySelector('#departure');
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+    var grammar = '#JSGF V1.0;'
+    var recognition = new SpeechRecognition();
+    var speechRecognitionList = new SpeechGrammarList();
+    speechRecognitionList.addFromString(grammar, 1);
+    recognition.grammars = speechRecognitionList;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.onresult = function(event) {
+        var last = event.results.length - 1;
+        var msg = event.results[last][0].transcript;
+        if(fromBoolean){
+        document.querySelector('#departure').value = msg;
+      }else{
+        document.querySelector('#destination').value = msg;
+      }
+    };
+    recognition.onspeechend = function() {
+        recognition.stop();
+    };
+    recognition.onerror = function(event) {
+        //message.textContent = 'Error occurred in recognition: ' + event.error;
+      console.log('error');
+    }
+    document.querySelector('#arr').addEventListener('click', function(){
+      fromBoolean = false;
+      recognition.start();
+    })
+    document.querySelector('#dep').addEventListener('click', function(){
+        fromBoolean = true;
+        recognition.start();
+    });
 
+  </script>
 
 </body>
 
