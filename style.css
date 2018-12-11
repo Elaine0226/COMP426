@@ -303,7 +303,7 @@ width: 200px;
     color: #5673a3;
     padding: 20px;
     font-size: 20px;
-    width: 80%;
+    width: 60%;
     margin-right: auto;
     margin-left: auto;
     text-align:center;
@@ -320,7 +320,7 @@ width: 200px;
     color: #5673a3;
     padding-top: 40px;
     font-size: 20px;
-    width: 80%;
+    width: 60%;
     margin-right: auto;
     margin-left: auto;
     
@@ -343,13 +343,14 @@ width: 200px;
 
 #myInfo{
     background-color:white;
-    border:1px solid rgb(94, 93, 93);color:#5673a3;
+    border:1px solid rgb(94, 93, 93);
+    color:#5673a3;
     font-size: 20px;
     text-align: center;
   
     margin-top: 15px;
     margin-bottom: 15px;
-    width:80%;
+    width:60%;
 
     margin-left: auto;
     margin-right:auto;
